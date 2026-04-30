@@ -82,7 +82,7 @@ export const createPost = async (
 ) => {
   const { data, error } = await client
     .from('posts')
-    .insert({ title, content, author_id: authorId, slug, published: false })
+    .insert({ title, content, author_id: authorId, slug, published: true })
     .select()
     .single()
   if (error) throw error

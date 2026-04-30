@@ -17,7 +17,13 @@ export default function Auth({ user, onUserChange }: AuthProps) {
     setError('')
     const { error: signUpError } = await supabase.auth.signUp({ email, password })
     if (signUpError) {
-      setError(signUpError.message)
+      if (signUpError.message.includes('email rate limit exceeded')) {
+        setError('邮件发送频率过高，请稍后再试或使用测试账号登录')
+      } else if (signUpError.message.includes('User already registered')) {
+        setError('该邮箱已注册，请直接登录')
+      } else {
+        setError(signUpError.message)
+      }
       return
     }
     const { data: { user: newUser }, error: fetchError } = await supabase.auth.getUser()
